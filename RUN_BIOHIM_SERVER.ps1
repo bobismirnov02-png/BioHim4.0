@@ -1,5 +1,5 @@
 ﻿$ErrorActionPreference = "Stop"
-$Host.UI.RawUI.WindowTitle = "BioHim 4.0.2"
+$Host.UI.RawUI.WindowTitle = "BioHim 4.1"
 Set-Location -LiteralPath $PSScriptRoot
 if ([string]::IsNullOrWhiteSpace($env:GEMINI_API_KEY)) {
     Write-Host "GEMINI_API_KEY is not set." -ForegroundColor Red

@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BioHim 4.0 — Право</title>
+<link rel="icon" type="image/png" href="/assets/biohim-64.png">
+<link rel="apple-touch-icon" href="/assets/biohim-192.png">
+<link rel="manifest" href="/manifest.json">
+<title>BioHim 4.1.3 — Право</title>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-<link rel="icon" type="image/png" href="/assets/biohim-logo.png">
 <style>
 :root{--bg:#f5f7f6;--surface:#fff;--surface2:#eef3f0;--ink:#17231d;--muted:#718078;--green:#13865b;--green-dark:#0c6645;--green-soft:#dff4e9;--blue:#3678ba;--red:#d95757;--yellow:#e6a52e;--line:#dfe7e2;--shadow:0 18px 55px rgba(21,45,34,.10)}
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}.app{display:flex;min-height:100vh}.sidebar{position:fixed;z-index:10;inset:0 auto 0 0;width:250px;background:#10251b;color:#eaf4ef;padding:24px 16px;display:flex;flex-direction:column}.logo{display:flex;align-items:center;gap:11px;padding:2px 10px 28px}.logo-icon{width:42px;height:42px;border-radius:14px;background:#e3f7ec;color:#126c49;display:grid;place-items:center;font-size:22px}.logo b{font-size:20px}.logo small{display:block;color:#91aa9f;font-size:11px;margin-top:2px}.nav{display:grid;gap:6px}.nav button{border:0;background:transparent;color:#b8cbc1;padding:12px 13px;border-radius:11px;text-align:left;font-weight:700}.nav button:hover,.nav button.active{background:#1b3b2d;color:#fff}.nav span{margin-right:10px}.sidebar-foot{margin-top:auto;color:#8fa79c;font-size:11px;line-height:1.5;padding:10px}.main{margin-left:250px;width:calc(100% - 250px);padding:28px 38px 60px}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.crumb{color:var(--muted);font-size:13px}.user{display:flex;gap:9px;align-items:center;font-weight:700}.avatar{width:38px;height:38px;border-radius:50%;background:#dff0e7;color:#176c4b;display:grid;place-items:center}.hero{border:1px solid #d5e7dc;background:linear-gradient(135deg,#e9f8ef,#f9fcfa);border-radius:25px;padding:34px 38px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}.badge{display:inline-block;background:var(--green-soft);color:#146b49;border-radius:99px;padding:7px 11px;font-size:11px;font-weight:900}.hero h1{font-size:clamp(31px,4vw,49px);line-height:1.04;letter-spacing:-2px;margin:12px 0}.hero p{max-width:720px;color:#5f7067;line-height:1.55}.hero-art{font-size:75px;min-width:175px;text-align:center}.section-head{display:flex;justify-content:space-between;align-items:end;margin:31px 0 15px;gap:15px}.section-head h2{font-size:21px}.section-head p{font-size:13px;color:var(--muted);margin-top:5px}.panel,.study-panel{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 7px 28px rgba(21,45,34,.04)}.dropzone{min-height:175px;border:2px dashed #c6d8cf;border-radius:16px;background:#fbfdfc;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:22px}.dropzone.drag{background:#edf9f2;border-color:var(--green)}.dropicon{font-size:37px}.dropzone h3{margin:7px 0 5px}.dropzone p{font-size:13px;color:var(--muted);margin-bottom:13px}.primary,.secondary,.danger,.testbtn{border:0;border-radius:11px;padding:11px 16px;font-weight:800}.primary{background:var(--green);color:white}.primary:hover{background:var(--green-dark)}.secondary{background:#edf3f0;color:#285540}.danger{background:#fff0f0;color:#b33e3e}.testbtn{background:#eaf1fa;color:#326a9f}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.builder-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px}.select,.input,.textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:#fff}.textarea{min-height:100px;resize:vertical}.label{font-size:11px;font-weight:900;color:#697770;margin-bottom:6px;display:block}.file-name{font-size:12px;color:#66766e;margin-top:9px}.pipeline{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:18px}.step{border:1px solid var(--line);border-radius:13px;padding:13px;background:#fbfdfc}.step strong{display:block;font-size:12px}.step small{display:block;color:var(--muted);margin-top:5px;line-height:1.4}.step.active{border-color:#9fd3ba;background:#f0fbf5}.step.done{border-color:#b8ddd0;background:#f4fcf8}.step .dot{width:24px;height:24px;border-radius:8px;background:#e7efeb;display:grid;place-items:center;font-size:12px;margin-bottom:8px}.step.active .dot{background:#d9f2e5;color:#126d4a}.step.done .dot{background:#d1eddc;color:#126d4a}.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:14px}.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px}.stat small{color:var(--muted)}.stat strong{display:block;font-size:24px;margin-top:5px}.progressbar{height:7px;background:#e4ebe7;border-radius:99px;overflow:hidden;margin-top:10px}.progressbar i{display:block;height:100%;width:0;background:var(--green);transition:.25s}.preview{margin-top:18px}.preview-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px}.ai{color:var(--green);font-size:12px;font-weight:900}.qrow{border:1px solid var(--line);border-radius:13px;padding:14px;margin-top:9px}.qrow.correct{border-color:#b9dec9;background:#fbfffc}.qrow.wrong{border-color:#ecc3c3;background:#fffafa}.qhead{display:flex;gap:10px}.qnum{width:28px;height:28px;flex:none;border-radius:9px;background:#e5f4eb;color:#176c4a;display:grid;place-items:center;font-weight:900}.qtext{font-weight:750;line-height:1.4}.opts{margin:9px 0 0 38px;display:grid;gap:7px;font-size:13px}.opt{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid #edf0ee;border-radius:9px;background:#fff}.opt input{accent-color:var(--green)}.answer{margin:11px 0 0 38px;background:#eef9f2;color:#176c4a;border-radius:9px;padding:8px 10px;font-size:12px;font-weight:800}.confidence{margin:11px 0 0 38px;font-size:11px;color:var(--muted)}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}.study-layout{display:grid;grid-template-columns:minmax(0,1fr) 315px;gap:18px}.mode{display:flex;background:#eaf0ed;border-radius:11px;padding:4px;width:max-content}.mode button{border:0;background:transparent;padding:8px 13px;border-radius:8px;color:#63736b;font-weight:800}.mode button.active{background:#fff;color:#173f2e;box-shadow:0 2px 8px #0000000b}.card-area{display:flex;justify-content:center;margin-top:18px}.card{width:min(700px,100%);height:410px;perspective:1200px}.card-inner{width:100%;height:100%;position:relative;transition:transform .55s;transform-style:preserve-3d}.card.flipped .card-inner{transform:rotateY(180deg)}.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:24px;border:1px solid var(--line);box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:34px}.front{background:linear-gradient(145deg,#fff,#f2faf6)}.back{transform:rotateY(180deg);background:#f8fcf9}.tag{font-size:11px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:17px}.card-q{font-size:26px;line-height:1.35;font-weight:850;max-width:620px}.choices{display:grid;gap:8px;width:min(560px,100%);margin-top:18px}.choice{border:1px solid var(--line);background:#fff;border-radius:9px;text-align:left;padding:10px 12px;color:#4f5f57;font-size:13px}.choice.right{border-color:#9fd1b5;background:#edf9f2}.choice.wrong{border-color:#e7aaaa;background:#fff1f1}.hint{position:absolute;bottom:17px;font-size:11px;color:#8b9791}.card-answer{font-size:24px;color:#176b49;font-weight:900}.explain{max-width:560px;margin-top:12px;color:#64736c;font-size:13px;line-height:1.5}.card-controls{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px}.progress{height:7px;background:#e4ebe7;border-radius:99px;overflow:hidden;margin-top:19px}.progress i{display:block;height:100%;width:0;background:var(--green);transition:.25s}.counter{text-align:center;color:var(--muted);font-size:12px;margin-top:7px}.side-title{font-size:14px;font-weight:900;margin-bottom:13px}.topic{padding:12px;border:1px solid var(--line);border-radius:12px;margin-top:8px;display:flex;justify-content:space-between;align-items:center;font-size:13px}.topic b{font-size:12px}.green{color:var(--green)}.red{color:var(--red)}.yellow{color:#b37a16}.empty{padding:30px;text-align:center;color:var(--muted);border:1px dashed #ccd8d2;border-radius:14px}.history{display:grid;gap:9px}.history-row{border:1px solid var(--line);border-radius:11px;padding:12px;display:grid;grid-template-columns:1fr auto;gap:10px}.muted{color:var(--muted)}.tiny{font-size:11px}.modal{position:fixed;inset:0;background:#10251b66;display:flex;align-items:center;justify-content:center;padding:20px;z-index:50}.modal-box{width:min(620px,100%);background:#fff;border-radius:20px;padding:24px;box-shadow:var(--shadow)}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.close{border:0;background:#edf3f0;width:34px;height:34px;border-radius:9px}.toast{position:fixed;right:24px;bottom:24px;background:#10251b;color:white;padding:12px 15px;border-radius:12px;box-shadow:var(--shadow);font-size:13px;opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s;z-index:70}.toast.show{opacity:1;transform:translateY(0)}.hidden{display:none!important}.status{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5}.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 9px;border-radius:999px;background:#eef4f1;font-size:11px;font-weight:800}.review-card{padding:13px;border:1px solid #efc4c4;border-radius:12px;background:#fffafa;margin-top:9px}.review-card h4{font-size:13px;line-height:1.4}.review-card p{font-size:12px;margin-top:7px;color:#6a746f}.review-card button{margin-top:9px}
@@ -48,11 +50,12 @@
 .ai,.tag,.card-answer{color:#5e1426}
 .progress i,.progressbar i{background:#5e1426}
 </style>
+<link rel="stylesheet" href="/biohim-v4.1.css">
 </head>
 <body data-biohim-subject="law">
 <div class="app">
 <aside class="sidebar">
-  <div class="logo"><div class="logo-icon">⚖️</div><div><b>BioHim 4.0</b><small>Право • Gemini AI</small></div></div>
+  <div class="logo"><div class="logo-icon"><img src="/assets/biohim-64.png" alt="BioHim"></div><div><b>BioHim 4.1.3</b><small>Право • Gemini AI</small></div></div>
   <nav class="nav subject-nav">
     <a href="/" class="nav-link"><span>🏠</span><b>Начало</b></a>
     <a href="/biology.html" class="nav-link" data-subject="biology"><span>🧬</span><b>Биология</b></a>
@@ -61,13 +64,18 @@
     <button onclick="scrollToId('savedDecksSection',this)"><span>🃏</span><b>Моите карти</b></button>
     <button onclick="scrollToId('resultsSection',this)"><span>📊</span><b>Резултати</b></button>
   </nav>
-  <div class="sidebar-foot">Версия 4.0<br>Gemini AI Vision + OCR fallback + 4 типа въпроси + повторение</div>
+  <div class="sidebar-foot">Версия 4.1.3<br>Gemini AI Vision + OCR fallback + 4 типа въпроси + повторение</div>
 </aside>
 <main class="main">
-<header class="topbar"><div class="crumb">BioHim 4.0 / <span id="crumb">Право</span></div><div class="user"><span>⚖️ Право</span><div class="avatar">4.0</div></div></header>
+<header class="topbar"><div class="crumb">BioHim 4.1.3 / <span id="crumb">Право</span></div><div class="user"><span>⚖️ Право</span><div class="avatar"><img src="/assets/biohim-64.png" alt="BioHim"></div></div></header>
 <section class="hero">
-  <div><span class="badge">⚖️ BIOHIM 4.0 • ПРАВО</span><h1>Право: учи по-умно с AI.</h1><p>Създавай флаш карти от снимки на тестове или директно от тема, урок, конспект и глава от книга. Картите и статистиката се пазят локално в браузъра.</p></div>
+  <div><span class="badge">⚖️ BIOHIM 4.1.3 • ПРАВО</span><h1>Право: учи по-умно с AI.</h1><p>Създавай флаш карти от снимки на тестове или директно от тема, урок, конспект и глава от книга. Картите и статистиката се пазят локално в браузъра.</p></div>
   <div class="hero-art">⚖️<br>🤖<br>🃏</div>
+</section>
+<section class="quick-actions" aria-label="Бърз старт">
+  <button type="button" onclick="document.getElementById('dropzone').scrollIntoView({behavior:'smooth',block:'center'})"><span>📷</span><b>Тест от снимка</b><small>Разпознай упражнения и контролни</small></button>
+  <button type="button" onclick="document.getElementById('materialGenerator').scrollIntoView({behavior:'smooth',block:'center'})"><span>📚</span><b>Учебен материал</b><small>Снимки и PDF → флаш карти</small></button>
+  <button type="button" onclick="document.getElementById('savedDecksSection').scrollIntoView({behavior:'smooth',block:'center'})"><span>🃏</span><b>Моите тестета</b><small>Търсене, любими и преговор</small></button>
 </section>
 <div class="section-head"><div><h2>1. Тестове и упражнения от снимка</h2><p>Качи една или няколко снимки на тест, контролно или упражнения. AI Vision ще разпознае въпросите и правилните отговори.</p></div><span class="pill">📷 Упражнения / тест</span></div>
 <section class="panel">
@@ -80,7 +88,7 @@
       <label class="label">ТИП ВЪПРОСИ</label><select id="questionType" class="select"><option value="auto" selected>🧠 Автоматично — разпознай типа</option><option value="mcq">🔘 Избор от 4 отговора</option><option value="open">✍️ Отворен отговор / липсващи думи</option><option value="yesno">✅ Да / Не</option><option value="combo">🔢 Подточки + комбинации (1 и 2 са верни)</option></select><label class="label" style="margin-top:15px">ПРЕДМЕТ</label><select id="subject" class="select" disabled><option value="law" selected>⚖️ Право</option></select>
       <label class="label" style="margin-top:15px">ИЗТОЧНИК</label><select id="source" class="select"><option>Тест / контролно</option><option>Упражнения / задачи</option><option>Пробен тест / изпит</option></select>
       <div class="row" style="margin-top:15px"><button class="secondary" onclick="loadDemo()">▶ Демо</button><button class="secondary" onclick="openSettings()">⚙ AI настройки</button><button class="primary" onclick="runPipeline()">✨ Анализирай</button></div>
-      <div id="status" class="status">Стъпка 1: избери една или повече снимки на тест или упражнения. BioHim 4.0 ще използва Gemini AI Vision, а при нужда — OCR fallback.</div>
+      <div id="status" class="status">Стъпка 1: избери една или повече снимки на тест или упражнения. BioHim 4.1.3 ще използва Gemini AI Vision, а при нужда — OCR fallback.</div>
     </div>
   </div>
   <div class="pipeline">
@@ -108,6 +116,10 @@
       <select id="materialCount" class="select">
         <option value="5">5</option><option value="10" selected>10</option><option value="15">15</option><option value="20">20</option><option value="30">30</option>
       </select>
+      <div class="material-options-grid">
+        <div><label class="label" style="margin-top:14px">ТИП КАРТИ</label><select id="materialCardStyle" class="select"><option value="open">✍️ Въпрос → отговор</option><option value="mcq">🔘 Тестови въпроси</option><option value="mixed" selected>🧠 Смесено</option></select></div>
+        <div><label class="label" style="margin-top:14px">ТРУДНОСТ</label><select id="materialDifficulty" class="select"><option value="easy">Лесно</option><option value="medium" selected>Средно</option><option value="hard">Трудно</option><option value="university">🎓 Университетско</option></select></div>
+      </div>
     </div>
     <div>
       <label class="label">УЧЕБНИ МАТЕРИАЛИ <span class="muted">(снимки и/или PDF • можеш да избереш няколко наведнъж)</span></label>
@@ -149,6 +161,13 @@
 </section>
 <section id="savedDecksSection" class="panel" style="margin-top:18px">
   <div class="section-head" style="margin-top:0"><div><h2>4. Запазени тестета</h2><p>Всички създадени комплекти се пазят локално в браузъра. Можеш да ги отваряш отново по всяко време.</p></div><span id="savedDeckCount" class="pill">0 тестета</span></div>
+  <div id="deckLibraryTools" class="deck-library-tools">
+    <input id="deckSearch" class="input" type="search" placeholder="🔎 Търси тесте…" oninput="biohimFilterDeckLibrary()">
+    <select id="deckSort" class="select" onchange="biohimFilterDeckLibrary()"><option value="newest">Най-нови</option><option value="oldest">Най-стари</option><option value="name">По име</option><option value="favorites">Любими първо</option></select>
+    <button class="secondary" type="button" onclick="biohimExportLibrary()">⬆ Експорт</button>
+    <button class="secondary" type="button" onclick="document.getElementById('deckImportFile').click()">⬇ Импорт</button>
+    <input id="deckImportFile" type="file" accept="application/json,.json,.biohim" class="hidden" onchange="biohimImportLibrary(this.files[0]);this.value=''">
+  </div>
   <div id="savedDecksList" class="saved-decks-list"><div class="empty">Все още няма запазени тестета.</div></div>
 </section>
 <div class="section-head"><div><h2>5. Учене</h2><p>Първо мислиш. После обръщаш картата. Накрая оценяваш себе си.</p></div><div class="mode"><button id="learnBtn" class="active" onclick="setMode('learn',this)">📚 Учене</button><button id="testBtn" onclick="setMode('test',this)">📝 Тест</button></div></div>
@@ -158,13 +177,13 @@
       <div class="face front"><div class="tag" id="tag">Биология</div><div class="card-q" id="cq">Избери „Демо“ или качи снимка, за да започнеш.</div><div class="choices" id="choices"></div><div class="hint">Натисни картата, за да видиш отговора</div></div>
       <div class="face back"><div class="tag">Правилен отговор</div><div class="card-answer" id="ca">—</div><div class="explain" id="ce">Отговорът ще се появи тук след създаването на комплекта.</div></div>
     </div></div></div>
-    <div class="card-controls"><button class="secondary" onclick="prev()">←</button><button class="danger" onclick="mark(false)">❌ Не знаех</button><button class="primary" onclick="mark(true)">Знаех ✅</button><button class="secondary" onclick="next()">→</button></div>
+    <div class="card-controls study-rating-controls"><button class="rate-again" onclick="mark(false)">❌ Не знаех</button><button class="rate-good" onclick="mark(true)">Знаех ✅</button></div>
     <div class="progress"><i id="bar"></i></div><div class="counter" id="counter">0 / 0</div>
   </div>
   <aside class="study-panel"><div class="side-title">🎯 Фокус за преговор</div><div id="focusTopics"><div class="empty">След първата учебна сесия тук ще се появят най-слабите теми.</div></div><div class="side-title" style="margin-top:25px">🔴 Грешни карти</div><p class="tiny muted" id="wrongSummary">0 карти чакат повторение.</p><button class="testbtn" style="margin-top:13px;width:100%" onclick="studyWrong()">🔴 Упражнявай грешните</button></aside>
 </section>
-<section id="resultsSection" class="panel" style="margin-top:18px"><div class="section-head" style="margin-top:0"><div><h2>6. Статистика</h2><p>История на отговорите и автоматичен списък за повторение.</p></div><div class="row"><button class="secondary" onclick="exportProgress()">⬇ Експорт</button><button class="danger" onclick="resetStatistics()">🗑 Изчисти статистиката</button></div></div><div id="history" class="history"></div></section>
-<p style="text-align:center;color:#8b9690;font-size:11px;margin-top:27px">BioHim 4.0 • Gemini AI Vision + локален proxy + OCR fallback + flashcards + localStorage</p>
+<section id="resultsSection" class="panel" style="margin-top:18px"><div class="section-head" style="margin-top:0"><div><h2>6. Статистика</h2><p>История на отговорите и автоматичен списък за повторение.</p></div><div class="row"><button class="secondary" onclick="exportProgress()">⬆ Експорт</button><button class="danger" onclick="resetStatistics()">🗑 Изчисти статистиката</button></div></div><div id="history" class="history"></div></section>
+<p style="text-align:center;color:#8b9690;font-size:11px;margin-top:27px">BioHim 4.1.3 • Gemini AI Vision + локален proxy + OCR fallback + flashcards + localStorage</p>
 </main></div>
 <div id="settingsModal" class="modal hidden"><div class="modal-box">
   <div class="modal-head"><h3>⚙ AI Vision настройки</h3><button class="close" onclick="closeSettings()">×</button></div>
@@ -216,8 +235,18 @@ let state=loadState();
 function loadState(){
   try{
     const raw=JSON.parse(localStorage.getItem(storeKey)||'{}');
-    return {deck:Array.isArray(raw.deck)?raw.deck:[],results:Array.isArray(raw.results)?raw.results:[],mistakes:raw.mistakes&&typeof raw.mistakes==='object'?raw.mistakes:{},streak:Number(raw.streak)||0,settings:raw.settings&&typeof raw.settings==='object'?raw.settings:{}};
-  }catch(e){return {deck:[],results:[],mistakes:{},streak:0,settings:{}};}
+    return {
+      ...raw,
+      deck:Array.isArray(raw.deck)?raw.deck:[],
+      results:Array.isArray(raw.results)?raw.results:[],
+      mistakes:raw.mistakes&&typeof raw.mistakes==='object'?raw.mistakes:{},
+      streak:Number(raw.streak)||0,
+      settings:raw.settings&&typeof raw.settings==='object'?raw.settings:{},
+      deckLibrary:Array.isArray(raw.deckLibrary)?raw.deckLibrary:[],
+      currentDeckId:raw.currentDeckId||null,
+      currentDeckName:String(raw.currentDeckName||'')
+    };
+  }catch(e){return {deck:[],results:[],mistakes:{},streak:0,settings:{},deckLibrary:[],currentDeckId:null,currentDeckName:''};}
 }
 function save(){localStorage.setItem(storeKey,JSON.stringify(state));updateAll()}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
@@ -251,7 +280,7 @@ function normalizeQuestion(x,idx){
     answer:String(rawAnswer).trim(),comboAnswer:String(rawCombo).trim(),
     subpoints:sub,comboOptions:comboOpts,e:String(x?.e??'').trim(),
     topic:String(x?.topic??'').trim()||(document.getElementById('subject').value==='law'?'Право':document.getElementById('subject').value==='chemistry'?'Химия':'Биология'),
-    number:x?.number??null,source:x?.source||'OCR'
+    number:x?.number??null,source:x?.source||'OCR',materialGenerated:!!x?.materialGenerated||x?.source==='AI-material'||x?.source==='AI тема / урок / глава'
   };
 }
 function validateQuestion(x){
@@ -1487,7 +1516,7 @@ function save(){
     list.innerHTML = lib.map(deck => {
       const wrongCount = (deck.cards || []).filter(c => (state.mistakes?.[c.id] || 0) > 0).length;
       const active = deck.id === state.currentDeckId ? ' active' : '';
-      return `<div class="saved-deck-card${active}" data-subject="${esc(deck.subject||'biology')}">
+      return `<div class="saved-deck-card${active}" data-deck-id="${esc(deck.id)}" data-subject="${esc(deck.subject||'biology')}">
         <div>
           <h4>${esc(deck.name || 'Без име')}</h4>
           <div class="saved-deck-meta">
@@ -1978,6 +2007,34 @@ function save(){
     }
   }
 
+  // BioHim 4.1.3.1 Speed Update: пазим качеството, но припокриваме AI решаването с локалния crop OCR.
+  // Crop задачите остават последователни, за да не претоварваме процесора с няколко Tesseract worker-а едновременно.
+  let cropQueueTail = Promise.resolve();
+  function queueCropTask(task){
+    const run = cropQueueTail.then(task, task);
+    cropQueueTail = run.catch(()=>{});
+    return run;
+  }
+
+  async function solveAndAttachCrops(file, baseQuestions, fileIndex){
+    const cropPromise = queueCropTask(() => attachQuestionCrops(file, baseQuestions, fileIndex));
+    let solvedQuestions = baseQuestions;
+    try {
+      solvedQuestions = await aiVisionSolve(baseQuestions);
+    } catch (e) {
+      console.warn('AI solve failed for', file.name, e);
+      toast('⚠ AI учителят не успя за ' + file.name + '. Въпросите остават за ръчна проверка.');
+    }
+    const croppedQuestions = await cropPromise;
+    return solvedQuestions.map((q, idx) => ({
+      ...q,
+      crop: croppedQuestions[idx]?.crop || q.crop || '',
+      sourceImageName: croppedQuestions[idx]?.sourceImageName || file.name,
+      sourceImageKey: croppedQuestions[idx]?.sourceImageKey || fileKey(file),
+      sourceImageIndex: croppedQuestions[idx]?.sourceImageIndex ?? fileIndex
+    }));
+  }
+
   async function processFile(file, requestedType, fileIndex){
     let localQuestions = [];
     let visionError = null;
@@ -1985,12 +2042,6 @@ function save(){
       const vr = await aiVisionExtract(file);
       localQuestions = vr.questions;
       if (requestedType !== 'auto') localQuestions = localQuestions.map(q => ({...q, type: requestedType}));
-      try {
-        localQuestions = await aiVisionSolve(localQuestions);
-      } catch (e) {
-        console.warn('AI solve failed for', file.name, e);
-        toast('⚠ AI учителят не успя за ' + file.name + '. Въпросите остават за ръчна проверка.');
-      }
     } catch (e) {
       visionError = e;
       console.warn('AI Vision failed for', file.name, e);
@@ -2000,14 +2051,9 @@ function save(){
       if (!o.text.trim()) throw new Error(file.name + ': AI Vision и OCR не откриха четим текст.');
       localQuestions = parseTypedText(o.text).map(normalizeQuestion);
       if (requestedType !== 'auto') localQuestions = localQuestions.map(q => ({...q, type: requestedType}));
-      try {
-        localQuestions = await aiVisionSolve(localQuestions);
-      } catch (solveErr) {
-        console.warn('AI solve after OCR failed for', file.name, solveErr);
-      }
     }
-    localQuestions = localQuestions.map(normalizeQuestion);
-    localQuestions = await attachQuestionCrops(file, localQuestions, fileIndex);
+    localQuestions = localQuestions.map((q, idx) => normalizeQuestion(q, idx));
+    localQuestions = await solveAndAttachCrops(file, localQuestions, fileIndex);
     return {questions: localQuestions, usedFallback: !!visionError};
   }
 
@@ -2015,19 +2061,37 @@ function save(){
     if (working) return;
     if (!selectedFiles.length) { loadDemo(); return; }
     working = true;
+    const startedAt = performance.now();
     const btns = document.querySelectorAll('.builder-grid button');
     btns.forEach(b => b.disabled = true);
     const requestedType = document.getElementById('questionType').value;
     try {
       setStep(1);
-      setStatus('AI Vision', '👁️ AI Vision анализира ' + selectedFiles.length + ' снимк' + (selectedFiles.length===1?'а':'и') + '…');
+      const parallelism = Math.min(2, selectedFiles.length);
+      setStatus('AI Vision', `⚡ AI Vision обработва ${selectedFiles.length} снимк${selectedFiles.length===1?'а':'и'}${parallelism>1?' • до 2 едновременно':''}…`);
+
+      // До две изображения се обработват паралелно. Редът на резултатите остава същият като реда на файловете.
+      const results = new Array(selectedFiles.length);
+      let nextIndex = 0;
+      let finished = 0;
+      async function worker(){
+        while (true) {
+          const idx = nextIndex++;
+          if (idx >= selectedFiles.length) return;
+          const file = selectedFiles[idx];
+          setStatus('AI Vision', `⚡ Обработка ${finished+1}/${selectedFiles.length}: ${file.name}${parallelism>1?' • паралелен режим':''}`);
+          results[idx] = await processFile(file, requestedType, idx);
+          finished++;
+          setStatus('AI Vision', `⚡ Готови ${finished}/${selectedFiles.length} снимки…`);
+        }
+      }
+      await Promise.all(Array.from({length: parallelism}, () => worker()));
+
       let allQuestions = [];
       let anyFallback = false;
       let totalParsed = 0;
-      for (let idx = 0; idx < selectedFiles.length; idx++) {
-        const file = selectedFiles[idx];
-        setStatus('AI Vision', `📄 Обработка ${idx+1}/${selectedFiles.length}: ${file.name}`);
-        const result = await processFile(file, requestedType, idx);
+      for (let idx = 0; idx < results.length; idx++) {
+        const result = results[idx];
         anyFallback = anyFallback || result.usedFallback;
         const qs = result.questions.map((q, qIdx) => ({...q, _globalIndex: allQuestions.length + qIdx}));
         totalParsed += qs.length;
@@ -2040,11 +2104,12 @@ function save(){
       document.getElementById('ocrBadge').textContent = anyFallback ? '● AI VISION + OCR FALLBACK' : '● AI VISION';
       document.getElementById('aiState').textContent = anyFallback ? '● AI Vision + OCR fallback' : '● AI Vision + AI учител';
       const stats = questions.reduce((a,q)=>(a[getQuestionType(q)] = (a[getQuestionType(q)]||0)+1, a), {});
+      const seconds = ((performance.now()-startedAt)/1000).toFixed(1);
       setStep(3,2);
-      setStatus('CHECK', `Готово: ${totalParsed} въпроса от ${selectedFiles.length} снимки • избор ${stats.mcq||0} • отворени ${stats.open||0} • Да/Не ${stats.yesno||0} • комбинации ${stats.combo||0}.`);
+      setStatus('CHECK', `Готово за ${seconds} сек.: ${totalParsed} въпроса от ${selectedFiles.length} снимки • избор ${stats.mcq||0} • отворени ${stats.open||0} • Да/Не ${stats.yesno||0} • комбинации ${stats.combo||0}.`);
       renderPreview();
       const blocked = questions.filter(q => validateQuestion(q).errors.length).length;
-      toast(`✓ Обработени ${selectedFiles.length} снимки и ${totalParsed} въпроса${blocked ? ' • ' + blocked + ' за проверка' : ''}.`);
+      toast(`✓ Обработени ${selectedFiles.length} снимки и ${totalParsed} въпроса за ${seconds} сек.${blocked ? ' • ' + blocked + ' за проверка' : ''}`);
     } catch (err) {
       console.error(err);
       setStatus('ERROR','❌ ' + err.message);
@@ -2067,12 +2132,12 @@ function save(){
     }
     const now = new Date().toISOString();
     const subject = document.getElementById('subject').value;
-    const materialDeck = questions.some(q=>q.source==='AI-material');
+    const materialDeck = questions.some(q=>q.source==='AI-material' || q.materialGenerated === true || q.source==='AI тема / урок / глава');
     const source = materialDeck ? 'AI тема / урок / глава' : document.getElementById('source').value;
     const suggested = materialDeck ? `${subjectLabel(subject)} • ${questions[0]?.topic||'Учебен материал'} • ${new Date().toLocaleString('bg-BG')}` : `${subjectLabel(subject)} • ${selectedFiles.length || 1} снимк${selectedFiles.length===1?'а':'и'} • ${new Date().toLocaleString('bg-BG')}`;
     const deckName = ((prompt('Име на новото тесте:', suggested) || suggested).trim()) || suggested;
     const deckId = 'deck-' + Date.now();
-    const cards = questions.map((x, idx) => ({...x, id:'c' + Date.now() + '-' + idx, subject, source, createdAt: now, crop:x.crop||'', sourceImageName:x.sourceImageName||'', sourceImageKey:x.sourceImageKey||'', sourceImageIndex:x.sourceImageIndex ?? 0}));
+    const cards = questions.map((x, idx) => ({...x, id:'c' + Date.now() + '-' + idx, subject, source, materialGenerated: materialDeck || x.materialGenerated === true || x.source === 'AI-material' || x.source === 'AI тема / урок / глава', createdAt: now, crop:x.crop||'', sourceImageName:x.sourceImageName||'', sourceImageKey:x.sourceImageKey||'', sourceImageIndex:x.sourceImageIndex ?? 0}));
     state.deck = clone(cards);
     state.currentDeckId = deckId;
     state.currentDeckName = deckName;
@@ -2101,17 +2166,11 @@ function save(){
   const hint = document.querySelector('.face.front .hint');
   const controls = document.querySelector('.card-controls');
   const controlsButtons = controls ? Array.from(controls.querySelectorAll('button')) : [];
-  const prevBtn = controlsButtons[0] || null;
-  const dontKnowBtn = controlsButtons[1] || null;
-  const knowBtn = controlsButtons[2] || null;
-  const nextBtn = controlsButtons[3] || null;
   const ca = document.getElementById('ca');
   const ce = document.getElementById('ce');
   const counter = document.getElementById('counter');
   const bar = document.getElementById('bar');
 
-  if (prevBtn) prevBtn.style.display = 'none';
-  if (nextBtn) nextBtn.style.display = 'none';
   if (controls) controls.style.display = 'none';
   if (hint) hint.style.display = 'none';
   if (frontTag) frontTag.style.display = 'none';
@@ -2158,14 +2217,34 @@ function save(){
     const type = getQuestionType(x);
 
     let front = '';
-    if (x.crop) {
-      front += `<img src="${x.crop}" alt="Изрязан въпрос" style="display:block;max-width:100%;max-height:${type==='open'?'285':'390'}px;object-fit:contain;border-radius:14px;background:#fff">`;
+    const isMaterialCard = x.materialGenerated === true || x.source === 'AI-material' || x.source === 'AI тема / урок / глава';
+    if (isMaterialCard) {
+      const materialTypeLabel = type === 'open' ? 'Отворен въпрос' : type === 'mcq' ? 'Затворен въпрос • A / B / C / D' : type === 'yesno' ? 'Затворен въпрос • Да / Не' : 'Въпрос с няколко опции';
+      front += `<div class="ai-material-question">${esc2(x.q)}</div>`;
+      if (type === 'mcq' && Array.isArray(x.o)) {
+        front += `<div class="ai-material-options">${x.o.map((opt,j)=>`<div class="ai-material-option"><b>${'ABCD'[j]})</b><span>${esc2(opt)}</span></div>`).join('')}</div>`;
+      } else if (type === 'yesno') {
+        front += `<div class="ai-material-options ai-material-options-short"><div class="ai-material-option"><b>Да</b></div><div class="ai-material-option"><b>Не</b></div></div>`;
+      } else if (type === 'combo') {
+        if (Array.isArray(x.subpoints) && x.subpoints.length) {
+          front += `<div class="ai-material-subpoints">${x.subpoints.map((sp,j)=>`<div><b>${j+1}.</b> ${esc2(sp)}</div>`).join('')}</div>`;
+        }
+        if (Array.isArray(x.comboOptions) && x.comboOptions.length) {
+          front += `<div class="ai-material-combos">${x.comboOptions.map(v=>`<span>${esc2(v)}</span>`).join('')}</div>`;
+        }
+      }
+      front += `<div class="ai-material-type">${materialTypeLabel}</div>`;
     } else {
-      // Fallback only if crop generation genuinely failed.
-      front += `<div style="font-size:23px;line-height:1.4;font-weight:800">${esc2(x.q)}</div>`;
-    }
-    if (type === 'open' && x.source !== 'AI-material') {
-      front += `<textarea id="studyOpenInputFront" style="width:min(580px,100%);min-height:95px;margin-top:17px;padding:13px;border:1px solid var(--line);border-radius:12px;background:#fff;resize:vertical" placeholder="Напиши отговора си…"></textarea>`;
+      // Exercise/test cards keep the existing crop-first behaviour unchanged.
+      if (x.crop) {
+        front += `<img src="${x.crop}" alt="Изрязан въпрос" style="display:block;max-width:100%;max-height:${type==='open'?'285':'390'}px;object-fit:contain;border-radius:14px;background:#fff">`;
+      } else {
+        // Fallback only if crop generation genuinely failed.
+        front += `<div style="font-size:23px;line-height:1.4;font-weight:800">${esc2(x.q)}</div>`;
+      }
+      if (type === 'open') {
+        front += `<textarea id="studyOpenInputFront" style="width:min(580px,100%);min-height:95px;margin-top:17px;padding:13px;border:1px solid var(--line);border-radius:12px;background:#fff;resize:vertical" placeholder="Напиши отговора си…"></textarea>`;
+      }
     }
 
     if (cq) {
@@ -2190,9 +2269,7 @@ function save(){
     if (controls) controls.style.display = card.classList.contains('flipped') ? 'flex' : 'none';
   };
 
-  // Make self-assessment visible only on the back. mark() already advances to the next card.
-  if (dontKnowBtn) dontKnowBtn.textContent = '❌ Не знаех';
-  if (knowBtn) knowBtn.textContent = 'Знаех ✅';
+  // Self-assessment buttons are defined directly in the markup and shown only on the back.
 
   // Definitive multi-file picker/drop behavior.
   const input = document.getElementById('fileInput');
@@ -2249,4 +2326,5 @@ function save(){
 
 <script>window.BIOHIM_V4={subject:"law",label:"Право",icon:"⚖️",color:"#5e1426"};</script>
 <script src="/biohim-v4.js"></script>
+<script src="/biohim-v4.1.js"></script>
 </body></html>

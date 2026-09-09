@@ -1,26 +1,14 @@
-BioHim 4.0.2
+BioHim 4.1 — Polish & Study Update
 
-Страници:
-- /              начална страница
-- /biology.html  Биология (зелено)
-- /chemistry.html Химия (синьо)
-- /law.html       Право (#5e1426)
+Ново:
+- официално BioHim лого + favicon + PWA иконки
+- бърз старт: Тест от снимка / Учебен материал / Моите тестета
+- генератор от снимки и PDF с тип карти и трудност
+- интелигентен преговор: Отново / Трудно / Добре / Лесно
+- дневен преговор според насрочването
+- търсене, сортиране и любими тестета
+- импорт/експорт на цялата библиотека
+- PWA manifest + service worker
 
-Ново в 4.0.2:
-1. Право като трети предмет.
-2. Отделна цветова тема за всеки предмет.
-3. Изчистване на статистиката по предмет без изтриване на тестетата.
-4. Gemini генератор на флаш карти от тема, урок, конспект или глава от книга (текст/TXT/MD).
-5. Отделни HTML страници за Биология, Химия и Право.
-6. Запазени тестета и статистика в localStorage, споделени между страниците на същия домейн.
-
-Render:
-- Качи файловете в GitHub.
-- Задай GEMINI_API_KEY като Environment Variable в Render.
-- Deploy.
-
-
-LAUNCHER HOTFIX:
-- START_BIOHIM.bat now opens a reliable PowerShell prompt for GEMINI_API_KEY.
-- Browser opens only after http://127.0.0.1:8787 responds.
-- BAT files use Windows CRLF line endings and always run from their own folder.
+Render: npm install / npm start. GEMINI_API_KEY остава Environment Variable.
+Локално: START_BIOHIM.bat.

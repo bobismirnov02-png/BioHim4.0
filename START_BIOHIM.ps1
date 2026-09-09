@@ -1,10 +1,10 @@
 ﻿$ErrorActionPreference = "Stop"
-$Host.UI.RawUI.WindowTitle = "BioHim 4.0.2"
+$Host.UI.RawUI.WindowTitle = "BioHim 4.1"
 Set-Location -LiteralPath $PSScriptRoot
 
 Write-Host ""
 Write-Host "===============================================" -ForegroundColor DarkGreen
-Write-Host "  BioHim 4.0.2 - Local Gemini Server" -ForegroundColor Green
+Write-Host "  BioHim 4.1 - Local Gemini Server" -ForegroundColor Green
 Write-Host "===============================================" -ForegroundColor DarkGreen
 Write-Host ""
 

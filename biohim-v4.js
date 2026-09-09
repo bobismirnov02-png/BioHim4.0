@@ -171,16 +171,18 @@
     const type=document.getElementById('materialType').value;
     const title=document.getElementById('materialTitle').value.trim();
     const count=Math.max(1,Math.min(30,Number(document.getElementById('materialCount').value)||10));
+    const cardStyle=document.getElementById('materialCardStyle')?.value||'mixed';
+    const difficulty=document.getElementById('materialDifficulty')?.value||'medium';
     if(type==='topic'&&!title&&!materialEncoded.length)return toast('Въведи тема или качи учебни файлове.');
     if((type==='lesson'||type==='chapter')&&!materialEncoded.length)return toast('За урок или глава качи поне една снимка или PDF.');
     working=true;
     const btn=document.querySelector('#materialGenerator .primary');if(btn)btn.disabled=true;
     if(materialStatus)materialStatus.textContent=`Gemini чете ${materialEncoded.length||'избраните'} файла и създава ${count} флаш карти по ${cfg.label}…`;
     try{
-      const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subject:cfg.subject,materialType:type,title,count,materials:materialEncoded})});
+      const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subject:cfg.subject,materialType:type,title,count,cardStyle,difficulty,materials:materialEncoded})});
       const raw=await res.text();if(!res.ok)throw new Error(`HTTP ${res.status}: ${raw.slice(0,500)}`);
       const payload=JSON.parse(raw);
-      questions=normalizeVisionQuestions(payload).map((q,idx)=>({...q,type:'open',o:[],a:null,subpoints:[],comboOptions:[],comboAnswer:'',source:'AI-material',crop:'',number:idx+1,topic:q.topic||title||cfg.label}));
+      questions=normalizeVisionQuestions(payload).map((q,idx)=>({...q,source:'AI-material',materialGenerated:true,crop:'',number:idx+1,topic:q.topic||title||cfg.label}));
       if(!questions.length)throw new Error('AI не върна флаш карти.');
       document.getElementById('ocrPanel')?.classList.add('hidden');
       renderPreview();setStep(3,2);setStatus('CHECK',`Готово: ${questions.length} AI флаш карти по ${cfg.label}. Провери ги и създай комплект.`);
