@@ -19,7 +19,7 @@
       state.currentDeckName=latest?.name||'';
     }
     save();
-  }catch(e){console.warn('BioHim 4.0 migration:',e)}
+  }catch(e){console.warn('BioHim 4.2 migration:',e)}
 
   // Subject-specific demo sets.
   const demos = {
@@ -143,7 +143,7 @@
     try{
       await encodeMaterialFiles();
       renderMaterialPreview();
-      if(materialStatus)materialStatus.textContent=`✓ Заредени ${materialFiles.length} учебни файла. Gemini ще ги използва като един общ материал.`;
+      if(materialStatus)materialStatus.textContent=`✓ Заредени ${materialFiles.length} учебни файла. BioHim AI ще ги използва като един общ материал.`;
     }catch(e){console.error(e);toast('Не успях да прочета един от учебните файлове.');}
   }
   window.removeMaterialAttachment=async function(index){
@@ -173,20 +173,31 @@
     const count=Math.max(1,Math.min(30,Number(document.getElementById('materialCount').value)||10));
     const cardStyle=document.getElementById('materialCardStyle')?.value||'mixed';
     const difficulty=document.getElementById('materialDifficulty')?.value||'medium';
-    if(type==='topic'&&!title&&!materialEncoded.length)return toast('Въведи тема или качи учебни файлове.');
-    if((type==='lesson'||type==='chapter')&&!materialEncoded.length)return toast('За урок или глава качи поне една снимка или PDF.');
+    if(type==='topic'&&!title&&!materialFiles.length)return toast('Въведи тема или качи учебни файлове.');
+    if((type==='lesson'||type==='chapter')&&!materialFiles.length)return toast('За урок или глава качи поне една снимка или PDF.');
+    if(!window.BioHimAI?.generateMaterial)return toast('BioHim AI модулът не е зареден. Провери интернет връзката и презареди страницата.');
+    const vs=typeof visionSettings==='function'?visionSettings():{mode:'auto'};
+    if(vs.mode==='off')return toast('BioHim AI е изключен в настройките.');
+
+    // Опитът за Puter вход се прави директно от потребителския click, за да не бъде блокиран popup-ът.
+    if(vs.mode==='auto'||vs.mode==='puter'){
+      try{await window.BioHimAI.ensureSignedIn();}
+      catch(e){
+        const backupReady=vs.mode==='auto'&&vs.backupProvider&&vs.backupProvider!=='none'&&sessionStorage.getItem('biohim42-'+vs.backupProvider+'-key');
+        if(!backupReady){console.error(e);if(materialStatus)materialStatus.textContent='❌ Puter входът не успя: '+e.message;return toast('Puter входът не успя: '+e.message);}
+      }
+    }
+
     working=true;
     const btn=document.querySelector('#materialGenerator .primary');if(btn)btn.disabled=true;
-    if(materialStatus)materialStatus.textContent=`Gemini чете ${materialEncoded.length||'избраните'} файла и създава ${count} флаш карти по ${cfg.label}…`;
+    if(materialStatus)materialStatus.textContent=`BioHim AI чете ${materialFiles.length||'избраните'} файла и създава ${count} флаш карти по ${cfg.label}…`;
     try{
-      const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({subject:cfg.subject,materialType:type,title,count,cardStyle,difficulty,materials:materialEncoded})});
-      const raw=await res.text();if(!res.ok)throw new Error(`HTTP ${res.status}: ${raw.slice(0,500)}`);
-      const payload=JSON.parse(raw);
+      const payload=await window.BioHimAI.generateMaterial({subject:cfg.subject,materialType:type,title,count,cardStyle,difficulty,files:materialFiles});
       questions=normalizeVisionQuestions(payload).map((q,idx)=>({...q,source:'AI-material',materialGenerated:true,crop:'',number:idx+1,topic:q.topic||title||cfg.label}));
-      if(!questions.length)throw new Error('AI не върна флаш карти.');
+      if(!questions.length)throw new Error('BioHim AI не върна флаш карти.');
       document.getElementById('ocrPanel')?.classList.add('hidden');
-      renderPreview();setStep(3,2);setStatus('CHECK',`Готово: ${questions.length} AI флаш карти по ${cfg.label}. Провери ги и създай комплект.`);
-      if(materialStatus)materialStatus.textContent=`✓ Създадени ${questions.length} карти от ${materialEncoded.length?materialEncoded.length+' файла':'темата'}. Провери ги в секцията отдолу.`;
+      renderPreview();setStep(3,2);setStatus('CHECK',`Готово: ${questions.length} BioHim AI флаш карти по ${cfg.label}. Провери ги и създай комплект.`);
+      if(materialStatus)materialStatus.textContent=`✓ Създадени ${questions.length} карти от ${materialFiles.length?materialFiles.length+' файла':'темата'}. Провери ги в секцията отдолу.`;
       document.getElementById('preview')?.scrollIntoView({behavior:'smooth',block:'start'});toast(`✓ ${questions.length} флаш карти са готови.`);updateAll();
     }catch(e){console.error(e);if(materialStatus)materialStatus.textContent='❌ Генерирането не успя: '+e.message;toast('Неуспешно генериране на флаш карти.');}
     finally{working=false;if(btn)btn.disabled=false;}

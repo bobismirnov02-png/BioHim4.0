@@ -1,7 +1,7 @@
-BIOHIM 4.1 — RENDER
+BIOHIM 4.2 — RENDER DEPLOY
 
-1. Замени файловете в GitHub repository-то с файловете от този пакет.
-2. Не качвай API ключ в GitHub.
-3. В Render -> BioHim -> Environment провери, че GEMINI_API_KEY е зададен.
-4. Deploy latest commit.
-5. След deploy: /api/health трябва да връща version 4.1.
+1. Качи съдържанието на тази папка в main branch на GitHub repository.
+2. Render: Runtime Node, Build Command: npm install, Start Command: npm start.
+3. Health Check Path: /api/health.
+4. Не е необходим GEMINI_API_KEY или друг общ AI ключ.
+5. Puter работи директно в браузъра. Личните Gemini/Groq резервни ключове се предоставят от потребителя в AI настройките.
