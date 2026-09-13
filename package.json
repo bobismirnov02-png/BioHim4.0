@@ -1,8 +1,12 @@
 {
-  "name": "biohim-4-2",
-  "version": "4.2.0",
+  "name": "biohim-4-3",
+  "version": "4.3.0",
   "private": true,
   "type": "module",
-  "scripts": {"start": "node server.js"},
-  "engines": {"node": ">=18"}
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
 }

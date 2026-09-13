@@ -1,5 +1,5 @@
 {
-  "name": "BioHim 4.2",
+  "name": "BioHim 4.3",
   "short_name": "BioHim",
   "start_url": "/",
   "display": "standalone",
@@ -7,7 +7,15 @@
   "theme_color": "#17231d",
   "lang": "bg",
   "icons": [
-    {"src":"/assets/biohim-192.png","sizes":"192x192","type":"image/png"},
-    {"src":"/assets/biohim-512.png","sizes":"512x512","type":"image/png"}
+    {
+      "src": "/assets/biohim-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/biohim-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
   ]
 }

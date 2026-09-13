@@ -77,7 +77,7 @@
         return media?puter.ai.chat(full,media,options):puter.ai.chat(full,options);
       };
       let r=await invoke(false);
-      try{return parsePuterResponse(r);}catch(first){console.warn('BioHim 4.2: Puter structured retry',first);r=await invoke(true);return parsePuterResponse(r);}
+      try{return parsePuterResponse(r);}catch(first){console.warn('BioHim 4.3: Puter structured retry',first);r=await invoke(true);return parsePuterResponse(r);}
     }finally{
       schedulePuterUsageRefresh();
     }
@@ -90,7 +90,7 @@
     const style=cardStyle==='open'?'Всички карти да са type=open.':cardStyle==='mcq'?'Всички карти да са type=mcq с точно 4 смислени варианта и един правилен A/B/C/D.':'Използвай смес от open, mcq и yesno; combo само когато материалът естествено го изисква.';
     const levels={easy:'лесно',medium:'средно',hard:'трудно',university:'университетско'};
     const sourceRule=list.length?`Използвай САМО предоставените ${list.length} файла${names.length?' ('+names.join(', ')+')':''}. Третирай ги като един общ материал. Не добавяй външни факти. Прочети внимателно изображенията и всички страници на PDF файловете.`:'Няма приложени файлове. Използвай устойчиви общоприети знания по посочената тема. При Право не измисляй конкретни членове, срокове или променливи нормативни детайли.';
-    return `Ти си преподавател по ${subjectLabel(subject)} в BioHim 4.2. Създай точно ${n} качествени флаш карти. Тип източник: ${type}. Тема: ${topic||'не е посочена'}. Трудност: ${levels[difficulty]||'средно'}. ${style} Всеки въпрос да проверява отделно знание и да няма дублиране. За open попълни answer; за mcq попълни o и a; за yesno answer е само Да/Не. Полето e да е кратко учебно обяснение, а topic — конкретната подтема. За неизползваните полета използвай празен стринг или празен масив. Номерирай от 1. ${sourceRule}`;
+    return `Ти си преподавател по ${subjectLabel(subject)} в BioHim 4.3. Създай точно ${n} качествени флаш карти. Тип източник: ${type}. Тема: ${topic||'не е посочена'}. Трудност: ${levels[difficulty]||'средно'}. ${style} Всеки въпрос да проверява отделно знание и да няма дублиране. За open попълни answer; за mcq попълни o и a; за yesno answer е само Да/Не. Полето e да е кратко учебно обяснение, а topic — конкретната подтема. За неизползваните полета използвай празен стринг или празен масив. Номерирай от 1. ${sourceRule}`;
   }
   function tempExt(file){
     const m=String(file?.name||'').match(/\.([A-Za-z0-9]{1,8})$/);if(m)return'.'+m[1].toLowerCase();
@@ -101,12 +101,12 @@
     const files=Array.from(args.files||[]),uploaded=[];
     try{
       for(let i=0;i<files.length;i++){
-        const f=files[i],tmp=`biohim42-temp-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}${tempExt(f)}`;
+        const f=files[i],tmp=`biohim43-temp-${Date.now()}-${i}-${Math.random().toString(36).slice(2,8)}${tempExt(f)}`;
         const item=await puter.fs.write(tmp,f,{overwrite:true});uploaded.push(item?.path||tmp);
       }
       const content=uploaded.map(path=>({type:'file',puter_path:path}));content.push({type:'text',text:buildMaterialPrompt({...args,files})});
       return await puterStructured({messages:[{role:'user',content}],model:args.puterModel||DEFAULT_PUTER_MODEL,reasoningEffort:['hard','university'].includes(args.difficulty)?'medium':'low'});
-    }finally{if(uploaded.length){try{await puter.fs.delete(uploaded);}catch(e){console.warn('BioHim 4.2: temp Puter cleanup failed',e);}}}
+    }finally{if(uploaded.length){try{await puter.fs.delete(uploaded);}catch(e){console.warn('BioHim 4.3: temp Puter cleanup failed',e);}}}
   }
 
   function getSessionKey(provider){try{return sessionStorage.getItem(SESSION_KEYS[provider])||'';}catch{return'';}}
@@ -129,7 +129,7 @@
     if(media)image=await fileToProviderDataURL(media,provider);
     for(const item of Array.from(attachments||[])){
       const f=item?.file||item;
-      if(provider==='groq'&&(f.type==='application/pdf'||/\.pdf$/i.test(f.name||'')))throw new Error('Groq резервният режим не поддържа PDF в BioHim 4.2. За PDF избери Gemini като резервен доставчик.');
+      if(provider==='groq'&&(f.type==='application/pdf'||/\.pdf$/i.test(f.name||'')))throw new Error('Groq резервният режим не поддържа PDF в BioHim 4.3. За PDF избери Gemini като резервен доставчик.');
       files.push({name:f.name||'file',mime:f.type||'',data:await fileToProviderDataURL(f,provider)});
     }
     if(provider==='groq'&&files.filter(x=>String(x.mime).startsWith('image/')).length+(image?1:0)>3)throw new Error('Groq Qwen 3.8 приема до 3 изображения в една заявка. Използвай Puter или Gemini за повече файлове.');
@@ -161,7 +161,7 @@
     try{
       const out=await puterStructured({...args,model:s.puterModel});lastProvider='Puter';return out;
     }catch(err){
-      console.warn('BioHim 4.2: Puter failed',err);
+      console.warn('BioHim 4.3: Puter failed',err);
       if(!backupReady(s)){
         const note=isLikelyPuterQuota(err)?'Puter квотата вероятно е изчерпана.':'Puter AI е недостъпен.';
         throw new Error(`${note} Добави личен Gemini/Groq API ключ в ⚙ AI настройки за автоматичен резервен режим. (${err?.message||err})`);
@@ -177,7 +177,7 @@
     if(s.mode==='gemini'||s.mode==='groq'){lastProvider=providerLabel(s.mode);return byokStructured(s.mode,{prompt,attachments:Array.from(args.files||[]),model:modelFor(s.mode,s),reasoningEffort:['hard','university'].includes(args.difficulty)?'medium':'low'});}
     try{const out=await puterGenerateMaterial({...args,puterModel:s.puterModel});lastProvider='Puter';return out;}
     catch(err){
-      console.warn('BioHim 4.2 material: Puter failed',err);
+      console.warn('BioHim 4.3 material: Puter failed',err);
       if(!backupReady(s)){
         const note=isLikelyPuterQuota(err)?'Puter квотата вероятно е изчерпана.':'Puter AI е недостъпен.';
         throw new Error(`${note} Добави личен Gemini/Groq API ключ в ⚙ AI настройки за резервен режим. (${err?.message||err})`);
@@ -273,7 +273,7 @@
       paintPuterUsage({signedIn:true,remaining:info.remaining,total:info.monthUsageAllowance});
       return usage;
     }catch(e){
-      console.warn('BioHim 4.2: Puter usage unavailable',e);
+      console.warn('BioHim 4.3: Puter usage unavailable',e);
       paintPuterUsage({signedIn:!!window.puter?.auth?.isSignedIn?.(),error:e?.message||String(e)});
       return null;
     }
@@ -399,7 +399,7 @@
       state.settings={...state.settings,key:'',endpoint:''};
       localStorage.setItem('biohim21-state-v2',JSON.stringify(state));
     }
-  }catch(e){console.warn('BioHim 4.2 key migration:',e);}
+  }catch(e){console.warn('BioHim 4.3 key migration:',e);}
 
   // Стартирай Puter login директно от потребителския click, за да не бъде блокиран popup-ът.
   const originalRunPipeline=window.runPipeline;
@@ -415,7 +415,7 @@
   installSettingsUI();
   document.querySelectorAll('.logo small').forEach(el=>{el.textContent=el.textContent.replace(/Gemini AI|Puter AI\s*•\s*EXP/gi,'BioHim AI');});
   document.querySelectorAll('.sidebar-foot').forEach(el=>{el.innerHTML=el.innerHTML.replace(/Gemini AI Vision|Puter AI Vision/gi,'BioHim AI Gateway');});
-  const footer=[...document.querySelectorAll('main > p')].find(p=>/Gemini AI Vision|Puter AI|BioHim AI Gateway/.test(p.textContent));if(footer)footer.textContent='BioHim 4.2 • BioHim AI Gateway • Puter + личен Gemini/Groq fallback • OCR fallback • flashcards • localStorage';
+  const footer=[...document.querySelectorAll('main > p')].find(p=>/Gemini AI Vision|Puter AI|BioHim AI Gateway/.test(p.textContent));if(footer)footer.textContent='BioHim 4.3 • BioHim AI Gateway • Puter + личен Gemini/Groq fallback • OCR fallback • flashcards • localStorage';
   const status=document.getElementById('status');if(status)status.textContent=status.textContent.replace(/Gemini AI Vision|Puter AI Vision/gi,'BioHim AI');
   document.querySelectorAll('.pill').forEach(el=>{el.textContent=el.textContent.replace(/Gemini генератор|Puter AI генератор/gi,'BioHim AI генератор');});
   ensurePuterUsageUI();

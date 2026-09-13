@@ -19,7 +19,7 @@
       state.currentDeckName=latest?.name||'';
     }
     save();
-  }catch(e){console.warn('BioHim 4.2 migration:',e)}
+  }catch(e){console.warn('BioHim 4.3 migration:',e)}
 
   // Subject-specific demo sets.
   const demos = {
