@@ -1,0 +1,35 @@
+
+/* BioHim 4.4 — Text Cards + Combined Deck Study */
+.exercise-card-front{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:660px;max-height:100%;overflow:auto;margin:auto;padding:8px 4px 24px}
+.exercise-card-question{font-size:clamp(22px,3vw,31px);line-height:1.34;font-weight:900;letter-spacing:-.35px;text-align:center;color:var(--ink);max-width:650px}
+.exercise-card-type{display:inline-flex;align-items:center;justify-content:center;margin-top:26px;padding:9px 15px;border-radius:999px;background:color-mix(in srgb,var(--green) 12%,#fff);color:color-mix(in srgb,var(--green) 80%,#4d1722);font-size:12px;font-weight:900;letter-spacing:.01em}
+.exercise-text-options{display:grid;gap:8px;width:min(590px,100%);margin-top:20px;text-align:left}
+.exercise-text-option{display:flex;gap:10px;align-items:flex-start;padding:10px 13px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.82);font-size:13px;line-height:1.42;color:#4f5f57}
+.exercise-text-option b{color:var(--green);min-width:22px}
+.exercise-text-subpoints{display:grid;gap:7px;width:min(590px,100%);margin-top:18px;text-align:left}
+.exercise-text-subpoints>div{padding:8px 11px;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.82);font-size:13px;line-height:1.4}
+.exercise-combo-pills{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:12px}
+.exercise-combo-pills span{padding:6px 9px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:11px;font-weight:800;color:var(--muted)}
+
+.deck-mix-trigger{position:relative}
+.deck-mix-panel{margin-top:12px;border:1px solid var(--line);border-radius:16px;background:#fbfdfc;padding:16px;box-shadow:0 12px 34px rgba(21,45,34,.07)}
+.deck-mix-panel.hidden{display:none!important}
+.deck-mix-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
+.deck-mix-head h3{font-size:15px;margin:0 0 4px}
+.deck-mix-head p{font-size:12px;color:var(--muted);line-height:1.45}
+.deck-mix-list{display:grid;gap:8px;max-height:310px;overflow:auto;padding-right:3px}
+.deck-mix-row{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;background:#fff;padding:11px 12px;cursor:pointer}
+.deck-mix-row:hover{border-color:color-mix(in srgb,var(--green) 35%,var(--line))}
+.deck-mix-row input{margin-top:3px;accent-color:var(--green)}
+.deck-mix-row-main{flex:1;min-width:0}
+.deck-mix-row-title{font-weight:850;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.deck-mix-row-meta{font-size:11px;color:var(--muted);margin-top:4px}
+.deck-mix-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:13px;padding-top:13px;border-top:1px solid var(--line)}
+.deck-mix-shuffle{display:flex;align-items:center;gap:8px;margin-right:auto;font-size:12px;font-weight:800;color:#46564e}
+.deck-mix-shuffle input{accent-color:var(--green)}
+.deck-mix-summary{font-size:11px;color:var(--muted);width:100%;margin-top:2px}
+.mixed-deck-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;background:color-mix(in srgb,var(--green) 12%,#fff);color:var(--green);font-size:11px;font-weight:900;margin-left:7px}
+@media(max-width:650px){
+  .exercise-card-question{font-size:22px}.exercise-card-type{margin-top:20px}.exercise-text-options{margin-top:15px}
+  .deck-mix-actions>.primary,.deck-mix-actions>.secondary{flex:1}.deck-mix-shuffle{width:100%;order:3}.deck-mix-panel{padding:13px}
+}

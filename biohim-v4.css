@@ -4,7 +4,7 @@
 .material-preview{margin-top:10px}.material-file-chip{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface2);font-size:12px;color:var(--muted)}.material-file-chip img{width:90px;height:70px;object-fit:contain;border-radius:8px;background:#fff;border:1px solid var(--line)}.material-file-chip .iconbtn{margin-left:auto}
 
 
-/* BioHim 4.0.2 — multi-file previews */
+/* BioHim 4.4 — multi-file previews */
 .exercise-preview,.material-preview{margin-top:12px;width:100%}
 .exercise-preview-grid,.material-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;width:100%}
 .preview-file-card{position:relative;border:1px solid var(--line);border-radius:12px;background:var(--surface2);padding:8px;min-width:0}

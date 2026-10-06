@@ -1,0 +1,42 @@
+/* BioHim 4.4 — 3/4 option MCQ + matching questions */
+.biohim44-match-editor{display:grid;gap:8px;margin-top:8px}
+.biohim44-match-edit-row{display:grid;grid-template-columns:36px 1fr 36px 1fr;gap:8px;align-items:center}
+.biohim44-match-key{display:grid;place-items:center;min-height:44px;border-radius:10px;background:var(--surface2);font-weight:900;color:var(--green)}
+
+.biohim44-match-card{gap:18px}
+.biohim44-match-question{max-width:880px}
+.biohim44-match-study{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;width:min(920px,100%);margin-top:18px;text-align:left;align-items:start}
+.biohim44-match-column{display:grid;gap:10px;padding:14px;border:1px solid color-mix(in srgb,var(--green) 14%,var(--line));border-radius:18px;background:color-mix(in srgb,var(--surface2) 72%,#fff)}
+.biohim44-match-column-title{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:color-mix(in srgb,var(--green) 78%,#5c4033)}
+.biohim44-match-item{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 8px 24px rgba(16,24,19,.04)}
+.biohim44-match-badge{display:inline-grid;place-items:center;min-width:36px;height:36px;padding:0 10px;border-radius:999px;background:color-mix(in srgb,var(--green) 14%,#fff);color:color-mix(in srgb,var(--green) 90%,#5c4033);font-size:15px;font-weight:900;line-height:1}
+.biohim44-match-text{min-width:0;font-size:16px;line-height:1.5;font-weight:700;color:var(--ink);word-break:break-word}
+
+.biohim44-match-response{display:grid;gap:10px;width:min(920px,100%);margin-top:14px;text-align:left}
+.biohim44-match-legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-bottom:4px}
+.biohim44-match-legend-title{grid-column:1/-1;font-size:12px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:#6e7a74;padding:0 4px}
+.biohim44-match-response-row{display:grid;grid-template-columns:minmax(0,1fr) 28px 92px;gap:10px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff;box-shadow:0 8px 24px rgba(16,24,19,.04);text-align:left}
+.biohim44-match-left{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;min-width:0}
+.biohim44-match-arrow{display:grid;place-items:center;font-size:20px;font-weight:900;color:var(--green)}
+.biohim44-match-response-row select{width:100%;min-width:0;height:44px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:800;color:var(--ink)}
+.biohim44-match-response .primary{justify-self:center;margin-top:8px}
+
+@media(max-width:700px){
+  .biohim44-match-edit-row{grid-template-columns:30px 1fr}
+  .biohim44-match-study{grid-template-columns:1fr}
+  .biohim44-match-column{padding:12px}
+  .biohim44-match-item{padding:11px 12px}
+  .biohim44-match-text{font-size:15px}
+  .biohim44-match-legend{grid-template-columns:1fr}
+  .biohim44-match-response-row{grid-template-columns:1fr;gap:8px}
+  .biohim44-match-arrow{display:none}
+  .biohim44-match-response-row select{max-width:110px}
+  .biohim44-match-response .primary{justify-self:stretch}
+}
+
+/* BioHim 4.4 — test-mode and accessibility fixes */
+.biohim44-test-controls{width:min(620px,100%);display:grid;gap:9px;margin:14px auto 0}
+.biohim44-test-controls .choice{width:100%;text-align:left}
+.biohim44-test-controls .primary{justify-self:center}
+.card:focus-visible{outline:3px solid color-mix(in srgb,var(--green) 55%,#fff);outline-offset:5px}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid color-mix(in srgb,var(--green) 45%,#fff);outline-offset:2px}

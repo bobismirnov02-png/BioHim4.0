@@ -4,11 +4,114 @@
   const subjectEl = document.getElementById('subject');
   if (subjectEl) subjectEl.value = cfg.subject;
 
-  function labelFor(s){ return s==='law'?'Право':s==='chemistry'?'Химия':'Биология'; }
-  function iconFor(s){ return s==='law'?'⚖️':s==='chemistry'?'🧪':'🧬'; }
+  // Global BioHim error dialog (white body, yellow header, blurred backdrop).
+  function ensureErrorDialog(){
+    if(document.getElementById('biohimErrorOverlay')) return;
+    const style=document.createElement('style');
+    style.id='biohim-error-style';
+    style.textContent=`
+      .biohim-error-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(15,24,19,.24);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:9999}
+      .biohim-error-overlay.hidden{display:none!important}
+      .biohim-error-box{width:min(560px,calc(100vw - 32px));background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.18);border:1px solid rgba(0,0,0,.06)}
+      .biohim-error-head{background:#e5a91f;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px}
+      .biohim-error-head-left{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.04em}
+      .biohim-error-icon-wrap{width:28px;height:28px;border-radius:999px;background:#fff;display:grid;place-items:center;flex:none;font-size:16px;line-height:1}
+      .biohim-error-title{font-size:15px;color:#fff}
+      .biohim-error-close{border:0;background:transparent;color:#fff;font-size:24px;line-height:1;font-weight:700;cursor:pointer;padding:0 4px}
+      .biohim-error-body{padding:18px 18px 20px;color:#111;line-height:1.55;font-size:15px;white-space:pre-wrap;word-break:break-word}
+    `;
+    document.head.appendChild(style);
+    const overlay=document.createElement('div');
+    overlay.id='biohimErrorOverlay';
+    overlay.className='biohim-error-overlay hidden';
+    overlay.innerHTML=`<div class="biohim-error-box" role="alertdialog" aria-modal="true" aria-labelledby="biohimErrorTitle"><div class="biohim-error-head"><div class="biohim-error-head-left"><div class="biohim-error-icon-wrap">⚠️</div><div id="biohimErrorTitle" class="biohim-error-title">ГРЕШКА</div></div><button type="button" class="biohim-error-close" aria-label="Затвори">×</button></div><div id="biohimErrorBody" class="biohim-error-body"></div></div>`;
+    document.body.appendChild(overlay);
+    let returnFocus=null;
+    const hide=()=>{overlay.classList.add('hidden');if(returnFocus?.focus)requestAnimationFrame(()=>returnFocus.focus());};
+    overlay._biohimSetReturnFocus=el=>{returnFocus=el;};
+    overlay.querySelector('.biohim-error-close')?.addEventListener('click',hide);
+    overlay.addEventListener('click',e=>{ if(e.target===overlay) hide(); });
+    window.addEventListener('keydown',e=>{ if(e.key==='Escape' && !overlay.classList.contains('hidden')) hide(); });
+  }
+
+  window.showErrorDialog=function(message, details=''){
+    ensureErrorDialog();
+    const overlay=document.getElementById('biohimErrorOverlay');
+    const body=document.getElementById('biohimErrorBody');
+    const text=[String(message||'Възникна грешка.'), String(details||'').trim()].filter(Boolean).join('\n\n');
+    if(body) body.textContent=text;
+    overlay?._biohimSetReturnFocus?.(document.activeElement);
+    overlay?.classList.remove('hidden');
+    requestAnimationFrame(()=>overlay?.querySelector('.biohim-error-close')?.focus());
+  };
+
+  window.addEventListener('error', function(event){
+    const msg=event?.error?.message || event?.message;
+    if(!msg) return;
+    if(/Script error/i.test(msg)) return;
+    window.showErrorDialog('Възникна грешка в приложението.', msg);
+  });
+  window.addEventListener('unhandledrejection', function(event){
+    const reason=event?.reason;
+    const msg=typeof reason==='string' ? reason : (reason?.message || 'Необработена грешка.');
+    window.showErrorDialog('Възникна грешка в приложението.', msg);
+  });
+
+
+  // Every caught pipeline error that reaches setStatus('ERROR', ...) is also shown in the dialog.
+  try{
+    const previousSetStatus = typeof setStatus === 'function' ? setStatus : null;
+    if(previousSetStatus){
+      setStatus = function(code,text){
+        previousSetStatus(code,text);
+        if(String(code).toUpperCase()==='ERROR') window.showErrorDialog('Операцията не беше завършена.', String(text||'Възникна грешка.').replace(/^❌\s*/,''));
+      };
+    }
+  }catch(e){ console.warn('BioHim status dialog hook:',e); }
+
+  // localStorage is intentionally kept for backwards compatibility, but quota errors must never crash the app.
+  // If image crops make the state too large, retry with a compact copy without crop previews.
+  let storageCompactMode=false, storageWarningShown=false;
+  function serializedState(compact=false){
+    return JSON.stringify(state, compact ? (key,value)=>key==='crop'?'':value : undefined);
+  }
+  function persistStateSafely(){
+    try{
+      localStorage.setItem(storeKey, serializedState(storageCompactMode));
+      return true;
+    }catch(err){
+      const quota=err?.name==='QuotaExceededError'||err?.name==='NS_ERROR_DOM_QUOTA_REACHED'||/quota|storage/i.test(String(err?.message||''));
+      if(!quota) throw err;
+      try{
+        storageCompactMode=true;
+        localStorage.setItem(storeKey, serializedState(true));
+        if(!storageWarningShown){
+          storageWarningShown=true;
+          toast('Мястото в браузъра е почти запълнено — тестетата са записани без изрязаните снимки.');
+          window.showErrorDialog('Мястото за локални данни е почти запълнено.', 'BioHim запази тестетата и статистиката, но премахна изрязаните изображения от записа, за да не загубиш данните. Експортирай библиотеката си, ако искаш резервно копие.');
+        }
+        return true;
+      }catch(second){
+        console.error('BioHim storage save failed:',second);
+        window.showErrorDialog('Неуспешно локално записване.', 'Браузърът няма достатъчно свободно място. Експортирай библиотеката и освободи място за сайта.');
+        return false;
+      }
+    }
+  }
+  try{
+    save = function(){ persistStateSafely(); if(typeof updateAll==='function') updateAll(); };
+  }catch(e){ console.warn('BioHim safe save hook:',e); }
+
+  function labelFor(s){ const m={biology:'Биология',chemistry:'Химия','history-law':'История на държавата и правото','theory-law':'Обща теория на правото','human-action':'Човешко действие (икономика)',law:'Обща теория на правото'}; return m[s]||'Биология'; }
+  function iconFor(s){ const m={biology:'🧬',chemistry:'🧪','history-law':'🏛️','theory-law':'⚖️','human-action':'📈',law:'⚖️'}; return m[s]||'🧬'; }
 
   // Migrate old statistics so previously recorded card IDs keep their subject when possible.
   try{
+    if(!state.streakBySubject || typeof state.streakBySubject!=='object' || Array.isArray(state.streakBySubject)){
+      state.streakBySubject={};
+      const legacySubject=state.deck?.[0]?.subject;
+      if(legacySubject && Number(state.streak)>0) state.streakBySubject[legacySubject]=Number(state.streak)||0;
+    }
     const cardSubject = new Map();
     (state.deckLibrary||[]).forEach(d => (d.cards||[]).forEach(c => cardSubject.set(c.id, c.subject||d.subject)));
     (state.results||[]).forEach(r => { if(!r.subject && cardSubject.has(r.id)) r.subject = cardSubject.get(r.id); });
@@ -19,7 +122,7 @@
       state.currentDeckName=latest?.name||'';
     }
     save();
-  }catch(e){console.warn('BioHim 4.3 migration:',e)}
+  }catch(e){console.warn('BioHim 4.4 migration:',e)}
 
   // Subject-specific demo sets.
   const demos = {
@@ -31,10 +134,9 @@
       {type:'open',q:'Каква е химичната формула на водата?',answer:'H₂O',e:'Молекулата съдържа два водородни и един кислороден атом.',topic:'Обща химия'},
       {type:'open',q:'Как се нарича частица с отрицателен електричен заряд?',answer:'Електрон',e:'Електронът е субатомна частица с отрицателен заряд.',topic:'Строеж на атома'}
     ],
-    law:[
-      {type:'open',q:'Какво представлява Конституцията в правната система?',answer:'Основният закон на държавата',e:'Конституцията има върховна юридическа сила в националната правна система.',topic:'Конституционно право'},
-      {type:'open',q:'Кои са трите класически власти при принципа на разделение на властите?',answer:'Законодателна, изпълнителна и съдебна',e:'Принципът разпределя държавната власт между трите основни функции.',topic:'Конституционно право'}
-    ]
+    'history-law':[{type:'open',q:'Какво изучава историята на държавата и правото?',answer:'Развитието на държавните и правните институции',e:'Дисциплината проследява историческото развитие на държавата и правото.',topic:'Въведение'}],
+    'theory-law':[{type:'open',q:'Какво е правна норма?',answer:'Общо правило за поведение, установено или признато от държавата',e:'Правната норма е основен елемент на правната система.',topic:'Правни норми'}],
+    'human-action':[{type:'open',q:'Какво означава ограничен ресурс в икономиката?',answer:'Ресурс, който не е достатъчен за удовлетворяване на всички желания',e:'Ограничеността налага избор между алтернативи.',topic:'Основи на икономиката'}]
   };
   window.loadDemo = function(){
     questions=(demos[cfg.subject]||demos.biology).map((x,i)=>normalizeQuestion({...x,o:[],subpoints:[],comboOptions:[],source:'demo'},i));
@@ -46,7 +148,11 @@
   record = function(card,ok,source){
     state.results.push({id:card.id,ok,source,time:new Date().toISOString(),question:card.q,topic:card.topic||'Общо',subject:card.subject||cfg.subject});
     if(!ok)state.mistakes[card.id]=(state.mistakes[card.id]||0)+1;else if(state.mistakes[card.id]>0)state.mistakes[card.id]=Math.max(0,state.mistakes[card.id]-1);
-    state.streak=ok?(state.streak||0)+1:0;save();renderDeck();renderFocus();
+    state.streakBySubject=state.streakBySubject&&typeof state.streakBySubject==='object'?state.streakBySubject:{};
+    const subject=card.subject||cfg.subject;
+    state.streakBySubject[subject]=ok?(Number(state.streakBySubject[subject])||0)+1:0;
+    state.streak=state.streakBySubject[subject]; // legacy compatibility
+    save();renderDeck();renderFocus();
   };
   renderHistory = function(){
     const el=document.getElementById('history'); if(!el)return;
@@ -64,7 +170,7 @@
     const rows=(state.results||[]).filter(r=>r.subject===cfg.subject),known=rows.filter(r=>r.ok).length,wrong=rows.filter(r=>!r.ok).length;
     const totalEl=document.getElementById('total'), knownEl=document.getElementById('known'), unknownEl=document.getElementById('unknown'), accuracyEl=document.getElementById('accuracy'), streakEl=document.getElementById('streak');
     if(totalEl)totalEl.textContent=(state.deck?.[0]?.subject===cfg.subject?state.deck.length:0)||questions.length||0;
-    if(knownEl)knownEl.textContent=known;if(unknownEl)unknownEl.textContent=wrong;if(accuracyEl)accuracyEl.textContent=(known+wrong)?Math.round(known/(known+wrong)*100)+'%':'—';if(streakEl)streakEl.textContent=state.streak||0;
+    if(knownEl)knownEl.textContent=known;if(unknownEl)unknownEl.textContent=wrong;if(accuracyEl)accuracyEl.textContent=(known+wrong)?Math.round(known/(known+wrong)*100)+'%':'—';if(streakEl)streakEl.textContent=Number(state.streakBySubject?.[cfg.subject])||0;
     const wrongCurrent=(state.deck||[]).filter(c=>c.subject===cfg.subject&&(state.mistakes[c.id]||0)>0).length;
     const ws=document.getElementById('wrongSummary');if(ws)ws.textContent=wrongCurrent+' карти чакат повторение.';
     const badge=document.getElementById('deckBadge');if(badge)badge.textContent=((state.deck?.[0]?.subject===cfg.subject?state.deck.length:0)||0)+' карти';
@@ -78,7 +184,7 @@
     (state.deckLibrary||[]).filter(d=>d.subject===cfg.subject).forEach(d=>(d.cards||[]).forEach(c=>subjectIds.add(c.id)));
     (state.deck||[]).filter(c=>c.subject===cfg.subject).forEach(c=>subjectIds.add(c.id));
     subjectIds.forEach(id=>delete state.mistakes[id]);
-    state.streak=0;save();updateAll();renderDeck();
+    state.streakBySubject=state.streakBySubject&&typeof state.streakBySubject==='object'?state.streakBySubject:{};state.streakBySubject[cfg.subject]=0;state.streak=0;save();updateAll();renderDeck();
     document.querySelector('.stats')?.classList.add('stats-reset-flash');setTimeout(()=>document.querySelector('.stats')?.classList.remove('stats-reset-flash'),650);
     toast(`Статистиката по ${cfg.label} е изчистена.`);
   };
@@ -96,7 +202,7 @@
   const savedList=document.getElementById('savedDecksList');if(savedList)new MutationObserver(filterSavedDecks).observe(savedList,{childList:true,subtree:true});
   setTimeout(filterSavedDecks,0);
 
-  // Учебен материал: една или повече снимки и/или PDF файлове.
+  // Учебен материал: една или повече снимки.
   let materialFiles=[];
   let materialEncoded=[];
   const materialFile=document.getElementById('materialFile');
@@ -110,12 +216,12 @@
   function materialFileKey(f){return [f.name,f.size,f.lastModified].join('|')}
   function isSupportedMaterialFile(f){
     const lower=String(f?.name||'').toLowerCase();
-    return !!f && (String(f.type||'').startsWith('image/') || f.type==='application/pdf' || lower.endsWith('.pdf'));
+    return !!f && String(f.type||'').startsWith('image/');
   }
   async function encodeMaterialFiles(){
     materialEncoded=[];
     for(const f of materialFiles){
-      materialEncoded.push({name:f.name,mime:f.type||(/\.pdf$/i.test(f.name)?'application/pdf':'application/octet-stream'),data:await readAsDataURL(f)});
+      materialEncoded.push({name:f.name,mime:f.type||'application/octet-stream',data:await readAsDataURL(f)});
     }
   }
   function renderMaterialPreview(){
@@ -123,39 +229,44 @@
     if(!materialFiles.length){materialPreview.innerHTML='';materialPreview.classList.add('hidden');return;}
     materialPreview.innerHTML=`<div class="material-preview-grid">${materialFiles.map((f,idx)=>{
       const encoded=materialEncoded.find(x=>x.name===f.name&&x.data);
-      const pdf=f.type==='application/pdf'||/\.pdf$/i.test(f.name);
-      return `<div class="preview-file-card">${pdf?'<div class="file-icon">📕</div>':`<img src="${encoded?.data||''}" alt="${esc(f.name)}">`}<button class="preview-remove" type="button" onclick="removeMaterialAttachment(${idx})" title="Премахни">×</button><div class="preview-file-name" title="${esc(f.name)}">${pdf?'PDF • ':''}${esc(f.name)}</div></div>`;
+      return `<div class="preview-file-card"><img src="${encoded?.data||''}" alt="${esc(f.name)}"><button class="preview-remove" type="button" onclick="removeMaterialAttachment(${idx})" title="Премахни">×</button><div class="preview-file-name" title="${esc(f.name)}">${esc(f.name)}</div></div>`;
     }).join('')}</div>`;
     materialPreview.classList.remove('hidden');
   }
   async function setMaterialFiles(filesLike){
     const incoming=Array.from(filesLike||[]).filter(isSupportedMaterialFile);
-    if(!incoming.length){toast('Избери изображения или PDF файлове.');return;}
+    const rejected=Array.from(filesLike||[]).filter(f=>!isSupportedMaterialFile(f));
+    if(rejected.length){
+      const hasPdf=rejected.some(f=>f.type==='application/pdf'||/\.pdf$/i.test(f.name||''));
+      const message=hasPdf ? 'PDF файловете вече не се поддържат в BioHim.' : 'Неподдържан файлов формат.';
+      if(typeof showErrorDialog==='function') showErrorDialog(message, hasPdf ? 'Качи снимки във формат PNG, JPG или WEBP.' : 'Разрешени са само снимки във формат PNG, JPG и WEBP.');
+    }
+    if(!incoming.length){toast('Избери снимки.');return;}
     const byKey=new Map(materialFiles.map(f=>[materialFileKey(f),f]));
     incoming.forEach(f=>byKey.set(materialFileKey(f),f));
     const next=[...byKey.values()].slice(0,10);
     const tooLarge=next.find(f=>f.size>20*1024*1024);
-    if(tooLarge){toast(`Файлът ${tooLarge.name} е над 20 MB.`);return;}
+    if(tooLarge){ if(typeof showErrorDialog==='function') showErrorDialog('Файлът е твърде голям.', `Файлът ${tooLarge.name} е над 20 MB.`); toast(`Файлът ${tooLarge.name} е над 20 MB.`); return;}
     const total=next.reduce((s,f)=>s+f.size,0);
-    if(total>30*1024*1024){toast('Общият размер на учебните файлове трябва да е до 30 MB.');return;}
+    if(total>30*1024*1024){ if(typeof showErrorDialog==='function') showErrorDialog('Файловете са твърде големи.', 'Общият размер на учебните снимки трябва да е до 30 MB.'); toast('Общият размер на учебните снимки трябва да е до 30 MB.'); return;}
     materialFiles=next;
-    if(materialStatus)materialStatus.textContent='Подготвям предпреглед на '+materialFiles.length+' файл'+(materialFiles.length===1?'':'а')+'…';
+    if(materialStatus)materialStatus.textContent='Подготвям предпреглед на '+materialFiles.length+' снимк'+(materialFiles.length===1?'а':'и')+'…';
     try{
       await encodeMaterialFiles();
       renderMaterialPreview();
-      if(materialStatus)materialStatus.textContent=`✓ Заредени ${materialFiles.length} учебни файла. BioHim AI ще ги използва като един общ материал.`;
-    }catch(e){console.error(e);toast('Не успях да прочета един от учебните файлове.');}
+      if(materialStatus)materialStatus.textContent=`✓ Заредени ${materialFiles.length} снимки. BioHim AI ще ги използва като един общ материал.`;
+    }catch(e){console.error(e);if(typeof showErrorDialog==='function') showErrorDialog('Не успях да прочета снимките.', e.message || 'Провери файловете и опитай отново.');toast('Не успях да прочета една от снимките.');}
   }
   window.removeMaterialAttachment=async function(index){
     materialFiles.splice(index,1);materialEncoded=[];
     if(materialFile)materialFile.value='';
     if(materialFiles.length)await encodeMaterialFiles();
     renderMaterialPreview();
-    if(materialStatus)materialStatus.textContent=materialFiles.length?`✓ Заредени ${materialFiles.length} учебни файла.`:'Няма избрани учебни файлове.';
+    if(materialStatus)materialStatus.textContent=materialFiles.length?`✓ Заредени ${materialFiles.length} снимки.`:'Няма избрани снимки.';
   };
   window.clearMaterialAttachments=function(){
     materialFiles=[];materialEncoded=[];if(materialFile)materialFile.value='';renderMaterialPreview();
-    if(materialStatus)materialStatus.textContent='Няма избрани учебни файлове.';
+    if(materialStatus)materialStatus.textContent='Няма избрани снимки.';
   };
   window.clearMaterialAttachment=window.clearMaterialAttachments;
 
@@ -173,33 +284,33 @@
     const count=Math.max(1,Math.min(30,Number(document.getElementById('materialCount').value)||10));
     const cardStyle=document.getElementById('materialCardStyle')?.value||'mixed';
     const difficulty=document.getElementById('materialDifficulty')?.value||'medium';
-    if(type==='topic'&&!title&&!materialFiles.length)return toast('Въведи тема или качи учебни файлове.');
-    if((type==='lesson'||type==='chapter')&&!materialFiles.length)return toast('За урок или глава качи поне една снимка или PDF.');
-    if(!window.BioHimAI?.generateMaterial)return toast('BioHim AI модулът не е зареден. Провери интернет връзката и презареди страницата.');
+    if(type==='topic'&&!title&&!materialFiles.length){ if(typeof showErrorDialog==='function') showErrorDialog('Липсват данни за генериране.', 'Въведи тема или качи поне една снимка.'); return toast('Въведи тема или качи снимки.'); }
+    if((type==='lesson'||type==='chapter')&&!materialFiles.length){ if(typeof showErrorDialog==='function') showErrorDialog('Липсват снимки.', 'За урок или глава качи поне една снимка.'); return toast('За урок или глава качи поне една снимка.'); }
+    if(!window.BioHimAI?.generateMaterial){ if(typeof showErrorDialog==='function') showErrorDialog('BioHim AI модулът не е зареден.', 'Провери интернет връзката и презареди страницата.'); return toast('BioHim AI модулът не е зареден.'); }
     const vs=typeof visionSettings==='function'?visionSettings():{mode:'auto'};
-    if(vs.mode==='off')return toast('BioHim AI е изключен в настройките.');
+    if(vs.mode==='off'){ if(typeof showErrorDialog==='function') showErrorDialog('BioHim AI е изключен.', 'Включи AI от настройките, за да генерираш флаш карти.'); return toast('BioHim AI е изключен в настройките.'); }
 
     // Опитът за Puter вход се прави директно от потребителския click, за да не бъде блокиран popup-ът.
     if(vs.mode==='auto'||vs.mode==='puter'){
       try{await window.BioHimAI.ensureSignedIn();}
       catch(e){
         const backupReady=vs.mode==='auto'&&vs.backupProvider&&vs.backupProvider!=='none'&&sessionStorage.getItem('biohim42-'+vs.backupProvider+'-key');
-        if(!backupReady){console.error(e);if(materialStatus)materialStatus.textContent='❌ Puter входът не успя: '+e.message;return toast('Puter входът не успя: '+e.message);}
+        if(!backupReady){console.error(e);if(materialStatus)materialStatus.textContent='❌ Puter входът не успя: '+e.message;if(typeof showErrorDialog==='function') showErrorDialog('Puter входът не успя.', e.message);return toast('Puter входът не успя: '+e.message);}
       }
     }
 
     working=true;
     const btn=document.querySelector('#materialGenerator .primary');if(btn)btn.disabled=true;
-    if(materialStatus)materialStatus.textContent=`BioHim AI чете ${materialFiles.length||'избраните'} файла и създава ${count} флаш карти по ${cfg.label}…`;
+    if(materialStatus)materialStatus.textContent=`BioHim AI чете ${materialFiles.length||'избраните'} снимки и създава ${count} флаш карти по ${cfg.label}…`;
     try{
       const payload=await window.BioHimAI.generateMaterial({subject:cfg.subject,materialType:type,title,count,cardStyle,difficulty,files:materialFiles});
       questions=normalizeVisionQuestions(payload).map((q,idx)=>({...q,source:'AI-material',materialGenerated:true,crop:'',number:idx+1,topic:q.topic||title||cfg.label}));
       if(!questions.length)throw new Error('BioHim AI не върна флаш карти.');
       document.getElementById('ocrPanel')?.classList.add('hidden');
       renderPreview();setStep(3,2);setStatus('CHECK',`Готово: ${questions.length} BioHim AI флаш карти по ${cfg.label}. Провери ги и създай комплект.`);
-      if(materialStatus)materialStatus.textContent=`✓ Създадени ${questions.length} карти от ${materialFiles.length?materialFiles.length+' файла':'темата'}. Провери ги в секцията отдолу.`;
+      if(materialStatus)materialStatus.textContent=`✓ Създадени ${questions.length} карти от ${materialFiles.length?materialFiles.length+' снимки':'темата'}. Провери ги в секцията отдолу.`;
       document.getElementById('preview')?.scrollIntoView({behavior:'smooth',block:'start'});toast(`✓ ${questions.length} флаш карти са готови.`);updateAll();
-    }catch(e){console.error(e);if(materialStatus)materialStatus.textContent='❌ Генерирането не успя: '+e.message;toast('Неуспешно генериране на флаш карти.');}
+    }catch(e){console.error(e);if(materialStatus)materialStatus.textContent='❌ Генерирането не успя: '+e.message;if(typeof showErrorDialog==='function') showErrorDialog('Неуспешно генериране на флаш карти.', e.message || 'Опитай отново.');toast('Неуспешно генериране на флаш карти.');}
     finally{working=false;if(btn)btn.disabled=false;}
   };
 

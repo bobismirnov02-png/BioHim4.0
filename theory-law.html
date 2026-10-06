@@ -6,7 +6,7 @@
 <link rel="icon" type="image/png" href="/assets/biohim-64.png">
 <link rel="apple-touch-icon" href="/assets/biohim-192.png">
 <link rel="manifest" href="/manifest.json">
-<title>BioHim 4.4 — Химия</title>
+<title>BioHim 4.4 — Обща теория на правото</title>
 <script>
 window.ensureBioHimTesseract=function(){
   if(window.Tesseract)return Promise.resolve(window.Tesseract);
@@ -58,27 +58,27 @@ function biohimSubjectLabelEarly(v){
 </style>
 <link rel="stylesheet" href="/biohim-v4.css">
 <style id="subjectTheme">
-:root{--green:#2f6fa8;--green-dark:#214f79;--green-soft:#e5f0fa;}
-.sidebar{background:#12283b}
-.hero{border-color:#e5f0fa;background:linear-gradient(135deg,#eaf4fc,#f9fcff)}
-.logo-icon,.avatar{background:#e5f0fa;color:#2f6fa8}
-.badge{background:#e5f0fa;color:#245b88}
+:root{--green:#5e1426;--green-dark:#42101c;--green-soft:#f4e5e9;}
+.sidebar{background:#42101c}
+.hero{border-color:#f4e5e9;background:linear-gradient(135deg,#f4e5e9,#fffdfb)}
+.logo-icon,.avatar{background:#f4e5e9;color:#5e1426}
+.badge{background:#f4e5e9;color:#5e1426}
 .nav a{border:0;background:transparent;color:#c7d2ce;padding:12px 13px;border-radius:11px;text-align:left;font-weight:700;text-decoration:none;display:block}
-.nav a:hover,.nav a.active{background:color-mix(in srgb, #2f6fa8 42%, #17251f);color:#fff}
-.nav-link[data-subject="chemistry"]{background:color-mix(in srgb, #2f6fa8 42%, #17251f);color:#fff}
-.material-generator{border-top:4px solid #2f6fa8}
-.primary{background:#2f6fa8}.primary:hover{background:#214f79}
-.ai,.tag,.card-answer{color:#2f6fa8}
-.progress i,.progressbar i{background:#2f6fa8}
+.nav a:hover,.nav a.active{background:color-mix(in srgb, #5e1426 42%, #17251f);color:#fff}
+.nav-link[data-subject="theory-law"]{background:color-mix(in srgb, #5e1426 42%, #17251f);color:#fff}
+.material-generator{border-top:4px solid #5e1426}
+.primary{background:#5e1426}.primary:hover{background:#42101c}
+.ai,.tag,.card-answer{color:#5e1426}
+.progress i,.progressbar i{background:#5e1426}
 </style>
 <link rel="stylesheet" href="/biohim-library.css">
 <link rel="stylesheet" href="/biohim-study.css">
 <link rel="stylesheet" href="/biohim-v4.4.css">
 </head>
-<body data-biohim-subject="chemistry">
+<body data-biohim-subject="theory-law">
 <div class="app">
 <aside class="sidebar">
-  <div class="logo"><div class="logo-icon"><img src="/assets/biohim-64.png" alt="BioHim"></div><div><b>BioHim 4.4</b><small>Химия • BioHim AI</small></div></div>
+  <div class="logo"><div class="logo-icon"><img src="/assets/biohim-64.png" alt="BioHim"></div><div><b>BioHim 4.4</b><small>Обща теория на правото • BioHim AI</small></div></div>
   <nav class="nav subject-nav">
     <a href="/" class="nav-link"><span>🏠</span><b>Начало</b></a>
     <a href="/biology.html" class="nav-link" data-subject="biology"><span>🧬</span><b>Биология</b></a>
@@ -92,10 +92,10 @@ function biohimSubjectLabelEarly(v){
   <div class="sidebar-foot">Версия 4.4<br>BioHim AI Gateway + OCR fallback + 5 типа въпроси + повторение</div>
 </aside>
 <main class="main">
-<header class="topbar"><div class="crumb">BioHim 4.4 / <span id="crumb">Химия</span></div><div class="user"><span>🧪 Химия</span><div class="avatar"><img src="/assets/biohim-64.png" alt="BioHim"></div></div></header>
+<header class="topbar"><div class="crumb">BioHim 4.4 / <span id="crumb">Обща теория на правото</span></div><div class="user"><span>⚖️ Обща теория на правото</span><div class="avatar"><img src="/assets/biohim-64.png" alt="BioHim"></div></div></header>
 <section class="hero">
-  <div><span class="badge">🧪 BIOHIM 4.4 • ХИМИЯ</span><h1>Химия: учи по-умно с AI.</h1><p>Създавай флаш карти от снимки на тестове или директно от тема, урок, конспект и глава от книга. Картите и статистиката се пазят локално в браузъра.</p></div>
-  <div class="hero-art">🧪<br>🤖<br>🃏</div>
+  <div><span class="badge">⚖️ BIOHIM 4.4 • ОБЩА ТЕОРИЯ НА ПРАВОТО</span><h1>Обща теория на правото: учи по-умно с AI.</h1><p>Създавай флаш карти от снимки на тестове или директно от тема, урок, конспект и глава от книга. Картите и статистиката се пазят локално в браузъра.</p></div>
+  <div class="hero-art">⚖️<br>🤖<br>🃏</div>
 </section>
 <section class="quick-actions" aria-label="Бърз старт">
   <button type="button" onclick="document.getElementById('dropzone').scrollIntoView({behavior:'smooth',block:'center'})"><span>📷</span><b>Тест от снимка</b><small>Разпознай упражнения и контролни</small></button>
@@ -110,7 +110,7 @@ function biohimSubjectLabelEarly(v){
       <input id="fileInput" type="file" accept="image/*" multiple class="hidden"><button class="primary" onclick="fileInput.click()">Избери снимка/снимки</button><div id="fileName" class="file-name"></div><div id="exercisePreview" class="exercise-preview hidden"></div>
     </div>
     <div>
-      <label class="label">ТИП ВЪПРОСИ</label><select id="questionType" class="select"><option value="auto" selected>🧠 Автоматично — разпознай типа</option><option value="mcq">🔘 Избор от 3 или 4 отговора</option><option value="open">✍️ Отворен отговор / липсващи думи</option><option value="yesno">✅ Да / Не</option><option value="combo">🔢 Подточки + комбинации (1 и 2 са верни)</option></select><label class="label" style="margin-top:15px">ПРЕДМЕТ</label><select id="subject" class="select" disabled><option value="chemistry" selected>🧪 Химия</option></select>
+      <label class="label">ТИП ВЪПРОСИ</label><select id="questionType" class="select"><option value="auto" selected>🧠 Автоматично — разпознай типа</option><option value="mcq">🔘 Избор от 3 или 4 отговора</option><option value="open">✍️ Отворен отговор / липсващи думи</option><option value="yesno">✅ Да / Не</option><option value="combo">🔢 Подточки + комбинации (1 и 2 са верни)</option></select><label class="label" style="margin-top:15px">ПРЕДМЕТ</label><select id="subject" class="select" disabled><option value="theory-law" selected>⚖️ Обща теория на правото</option></select>
       <label class="label" style="margin-top:15px">ИЗТОЧНИК</label><select id="source" class="select"><option>Тест / контролно</option><option>Упражнения / задачи</option><option>Пробен тест / изпит</option></select>
       <div class="row" style="margin-top:15px"><button class="secondary" onclick="loadDemo()">▶ Демо</button><button class="secondary" onclick="openSettings()">⚙ AI настройки</button><button class="primary" onclick="runPipeline()">✨ Анализирай</button></div>
       <div id="status" class="status">Стъпка 1: избери една или повече снимки на тест или упражнения. BioHim 4.4 ще използва Gemini AI Vision, а при нужда — OCR fallback.</div>
@@ -2352,7 +2352,7 @@ function save(){
 })();
 </script>
 
-<script>window.BIOHIM_V4={subject:"chemistry",label:"Химия",icon:"🧪",color:"#2f6fa8"};</script>
+<script>window.BIOHIM_V4={subject:"theory-law",label:"Обща теория на правото",icon:"⚖️",color:"#5e1426"};</script>
 <script src="/biohim-v4.js"></script>
 <script src="/biohim-library.js"></script>
 <script>

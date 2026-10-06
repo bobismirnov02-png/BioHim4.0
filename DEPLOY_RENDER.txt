@@ -1,7 +1,7 @@
-BIOHIM 4.3 — RENDER DEPLOY
+BIOHIM 4.4 — RENDER DEPLOY
 
-1. Качи съдържанието на тази папка в main branch на GitHub repository.
-2. Render: Runtime Node, Build Command: npm install, Start Command: npm start.
-3. Health Check Path: /api/health.
-4. Не е необходим GEMINI_API_KEY или друг общ AI ключ.
-5. Puter работи директно в браузъра. Личните Gemini/Groq резервни ключове се предоставят от потребителя в AI настройките.
+1. Качи съдържанието на този build в проекта си.
+2. Build command: npm install (ако Render го изисква).
+3. Start command: npm start
+4. След deploy отвори сайта и направи Ctrl + F5 при нужда, за да се обнови service worker кешът.
+5. Провери /api/health — version трябва да бъде 4.4.
